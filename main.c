@@ -23,6 +23,9 @@ enum gba_state {
 int main(void) {
   /* TODO: */
   // Manipulate REG_DISPCNT here to set Mode 3. //
+  REG_DISPCNT = MODE3 | BG2_ENABLE;
+
+  //setPixel(HEIGHT / 2, WIDTH / 2, CYAN);
 
   // Save current and previous state of button input.
   u32 previousButtons = BUTTONS;

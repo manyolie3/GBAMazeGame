@@ -48,11 +48,11 @@ void setPixel(int row, int col, u16 color) {
 */
 void drawRectDMA(int row, int col, int width, int height, volatile u16 color) {
   // TODO: IMPLEMENT
-  UNUSED(row);
-  UNUSED(col);
-  UNUSED(width);
-  UNUSED(height);
-  UNUSED(color);
+  for(int r=0; r<height; r++) {
+              for(int c=0; c<width; c++)
+                      setPixel(row+r, col+c, color);
+
+        }
 }
 
 /*
