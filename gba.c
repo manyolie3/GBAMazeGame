@@ -48,11 +48,11 @@ void setPixel(int row, int col, u16 color) {
 */
 void drawRectDMA(int row, int col, int width, int height, volatile u16 color) {
   // TODO: IMPLEMENT
-  for(int r=0; r<height; r++) {
-              for(int c=0; c<width; c++)
-                      setPixel(row+r, col+c, color);
-
-        }
+  for (int r = 0; r < height; r++) {
+    DMA[3].src = &color;
+    DMA[3].dst = &videoBuffer[OFFSET(row, col, WIDTH)];
+    DMA[3].cnt = width | DMA_ON | DMA_DESTINATION_INCREMENT | DMA_SOURCE_FIXED;
+  }
 }
 
 /*
@@ -62,7 +62,9 @@ void drawRectDMA(int row, int col, int width, int height, volatile u16 color) {
 */
 void drawFullScreenImageDMA(const u16 *image) {
   // TODO: IMPLEMENT
-  UNUSED(image);
+  DMA[3].src = (volatile void *)image;
+  DMA[3].dst = (volatile void *)videoBuffer;
+  DMA[3].cnt = WIDTH * HEIGHT | DMA_ON | DMA_DESTINATION_INCREMENT | DMA_SOURCE_INCREMENT;
 }
 
 /*
@@ -74,11 +76,11 @@ void drawFullScreenImageDMA(const u16 *image) {
 */
 void drawImageDMA(int row, int col, int width, int height, const u16 *image) {
   // TODO: IMPLEMENT
-  UNUSED(row);
-  UNUSED(col);
-  UNUSED(width);
-  UNUSED(height);
-  UNUSED(image);
+  for (int r = 0; r < height; r++) {
+    DMA[3].src = (volatile void *)(image+r*width);
+    DMA[3].dst = &videoBuffer[OFFSET(r+row, col, WIDTH)];
+    DMA[3].cnt = width | DMA_ON | DMA_DESTINATION_INCREMENT | DMA_SOURCE_INCREMENT;
+  }
 }
 
 /*
@@ -102,7 +104,9 @@ void undrawImageDMA(int row, int col, int width, int height, const u16 *image) {
 */
 void fillScreenDMA(volatile u16 color) {
   // TODO: IMPLEMENT
-  UNUSED(color);
+  DMA[3].src = &color;
+  DMA[3].dst = &videoBuffer[0];
+  DMA[3].cnt = WIDTH * HEIGHT | DMA_ON | DMA_DESTINATION_INCREMENT | DMA_SOURCE_FIXED;
 }
 
 /* STRING-DRAWING FUNCTIONS (provided) */
