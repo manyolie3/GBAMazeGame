@@ -6,6 +6,7 @@
 #include "gba.h"
 #include "images/openingscreen.h"
 #include "images/bitty.h"
+#include "images/playscreen.h"
 
 /* TODO: */
 // Include any header files for title screen or exit
@@ -37,21 +38,23 @@ int main(void) {
   // Load initial application state
   enum gba_state state = START;
   drawFullScreenImageDMA(openingscreen);
-  //waitForVBlank();
   drawImageDMA(32, 32, 15, 15, bitty);
-
 
   while (1) {
     currentButtons = BUTTONS; // Load the current state of the buttons
-
+    waitForVBlank();
+    
     /* TODO: */
     // Manipulate the state machine below as needed //
     // NOTE: Call waitForVBlank() before you draw
 
     switch (state) {
       case START:
-      
-
+        if (KEY_JUST_PRESSED(BUTTON_START, currentButtons, previousButtons)) {
+          state = PLAY;
+          drawFullScreenImageDMA(playscreen);
+        }
+        break;
         // state = ?
         break;
       case PLAY:
