@@ -24,4 +24,18 @@
 *
 */
 
+struct Villager {
+    int row;
+    int col;
+    int width;
+    int height;
+};
+
+struct Platform {
+    int row;
+    int col;
+    int width;
+    int height;
+};
+
 #endif

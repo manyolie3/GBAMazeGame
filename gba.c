@@ -91,11 +91,12 @@ void drawImageDMA(int row, int col, int width, int height, const u16 *image) {
 */
 void undrawImageDMA(int row, int col, int width, int height, const u16 *image) {
   // TODO: IMPLEMENT
-  UNUSED(row);
-  UNUSED(col);
-  UNUSED(width);
-  UNUSED(height);
-  UNUSED(image);
+  int r;
+    for (r = 0; r < height; r++) {
+        DMA[3].src = &image[r * width]; // Point DMA source to the corresponding row in the image
+        DMA[3].dst = &videoBuffer[(row + r) * WIDTH + col]; // Point DMA destination to the corresponding row in the video buffer
+        DMA[3].cnt = width | DMA_ON | DMA_SOURCE_INCREMENT | DMA_DESTINATION_INCREMENT; // Set DMA control register
+    }
 }
 
 /*

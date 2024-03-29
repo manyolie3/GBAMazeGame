@@ -4,9 +4,9 @@
 #include <stdlib.h>
 
 #include "gba.h"
-#include "images/openingscreen.h"
-#include "images/bitty.h"
-#include "images/playscreen.h"
+#include "images/openingscreen3.h"
+#include "images/bitty2.h"
+#include "images/playscreen2.h"
 
 /* TODO: */
 // Include any header files for title screen or exit
@@ -34,11 +34,33 @@ int main(void) {
   // Save current and previous state of button input.
   u32 previousButtons = BUTTONS;
   u32 currentButtons = BUTTONS;
+  
+  //declaring villager struct
+  struct Villager villager;
+  villager.row = 105;
+  villager.col = 30;
+  villager.width = 25;
+  villager.height = 25;
+
+  //declaring platform variables
+  struct Platform platform;
+  platform.row = 50;
+  platform.col = 40;
+  platform.width = 20;
+  platform.height = 10;
+
+  //int jumpHeight = 0;
+  int jumpVelocity = -25; // Adjust as needed
+  int gravity = 1; // Adjust as needed
+  int jumping = 0;
+  int horizontalVelocity = 0;
+  int groundLevel = 100;
 
   // Load initial application state
   enum gba_state state = START;
-  drawFullScreenImageDMA(openingscreen);
-  drawImageDMA(32, 32, 15, 15, bitty);
+  drawFullScreenImageDMA(openingscreen3);
+  drawCenteredString(HEIGHT / 2, WIDTH / 2, 0, 0, "WELCOME, PRESS ENTER TO PLAY", BLACK);
+
 
   while (1) {
     currentButtons = BUTTONS; // Load the current state of the buttons
@@ -52,14 +74,61 @@ int main(void) {
       case START:
         if (KEY_JUST_PRESSED(BUTTON_START, currentButtons, previousButtons)) {
           state = PLAY;
-          drawFullScreenImageDMA(playscreen);
+          drawFullScreenImageDMA(playscreen2);
         }
         break;
-        // state = ?
-        break;
       case PLAY:
+        // Clear the previous position of the sprite
+            drawRectDMA(platform.row, platform.col, platform.width, platform.height, BLACK);  
+            undrawImageDMA(villager.row, villager.col, villager.width, villager.height, playscreen2);
+            
+            horizontalVelocity = 0;
 
-        // state = ?
+            // Handle horizontal movement (left/right)
+            if (KEY_DOWN(BUTTON_LEFT, currentButtons)) {
+                if (villager.col >= 2) {
+                  horizontalVelocity = -2; // Adjust velocity as needed
+                }
+            } else if (KEY_DOWN(BUTTON_RIGHT, currentButtons)) {
+                if (villager.col <= 240 - villager.width) {
+                  horizontalVelocity = 2; // Adjust velocity as needed
+                }
+            }
+            
+            // Handle vertical movement (jumping)
+            if (KEY_DOWN(BUTTON_UP, currentButtons) && !jumping) {
+                jumping = 1; // Set jumping flag to true
+                jumpVelocity = -25; // Set initial jump velocity
+            } if (KEY_DOWN(BUTTON_DOWN, currentButtons) && !jumping && villager.row != groundLevel) {
+                jumping = 1;
+                jumpVelocity = 15;
+            }
+            
+            // Apply gravity if not jumping or if not at the ground level
+            if (!jumping || villager.row < groundLevel) {
+                if (villager.row != groundLevel) {
+                  villager.row = groundLevel; // Apply gravity
+                }
+            }
+            
+            // Update vertical position based on jumping
+            if (jumping) {
+                villager.row += jumpVelocity; // Move vertically
+                jumpVelocity += gravity; // Apply gravity to jump velocity
+                
+                // Check if the sprite reaches the ground level
+                if (villager.row >= groundLevel) {
+                    jumping = 0; // Stop jumping
+                    villager.row = groundLevel; // Set sprite position to the ground level
+                }
+            }
+            
+            // Update horizontal position based on horizontal velocity
+            villager.col += horizontalVelocity;
+            
+            // Draw the sprite in its new position
+            drawImageDMA(villager.row, villager.col, villager.width, villager.height, bitty2);
+            // state = ?
         break;
       case WIN:
 
