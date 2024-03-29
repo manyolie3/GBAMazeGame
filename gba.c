@@ -49,10 +49,13 @@ void setPixel(int row, int col, u16 color) {
 void drawRectDMA(int row, int col, int width, int height, volatile u16 color) {
   // TODO: IMPLEMENT
   for (int r = 0; r < height; r++) {
-    DMA[3].src = &color;
-    DMA[3].dst = &videoBuffer[OFFSET(row, col, WIDTH)];
-    DMA[3].cnt = width | DMA_ON | DMA_DESTINATION_INCREMENT | DMA_SOURCE_FIXED;
-  }
+
+       volatile u16* destination = &videoBuffer[OFFSET(row + r, col, WIDTH)];
+    
+        DMA[3].src = &color;
+        DMA[3].dst = destination;
+        DMA[3].cnt = width | DMA_ON | DMA_DESTINATION_INCREMENT | DMA_SOURCE_FIXED;
+    }
 }
 
 /*

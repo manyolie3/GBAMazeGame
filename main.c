@@ -47,7 +47,7 @@ int main(void) {
   platform.row = 50;
   platform.col = 40;
   platform.width = 20;
-  platform.height = 10;
+  platform.height = 50;
 
   //int jumpHeight = 0;
   int jumpVelocity = -25; // Adjust as needed
@@ -56,16 +56,28 @@ int main(void) {
   int horizontalVelocity = 0;
   int groundLevel = 100;
 
+  //initialize timer stuff
+  unsigned int timer = 30;
+  int gameStart = 0;
+
+
   // Load initial application state
   enum gba_state state = START;
   drawFullScreenImageDMA(openingscreen3);
-  drawCenteredString(HEIGHT / 2, WIDTH / 2, 0, 0, "WELCOME, PRESS ENTER TO PLAY", BLACK);
+  drawCenteredString(HEIGHT / 2, WIDTH / 2, 0, 0, "HELP BITTY COLLECT LEAVES AND GET HOME!", BLACK);
+  drawCenteredString(HEIGHT / 2, WIDTH / 2, 15, 15, "PRESS ENTER TO PLAY!", BLACK);
 
 
   while (1) {
     currentButtons = BUTTONS; // Load the current state of the buttons
+
+    if (gameStart && vBlankCounter % 60 == 0) {
+      if (timer > 0) {
+        timer--;
+      }
+    }
+
     waitForVBlank();
-    
     /* TODO: */
     // Manipulate the state machine below as needed //
     // NOTE: Call waitForVBlank() before you draw
@@ -76,6 +88,10 @@ int main(void) {
           state = PLAY;
           drawFullScreenImageDMA(playscreen2);
         }
+
+        timer = 30;
+        gameStart = 1;
+
         break;
       case PLAY:
         // Clear the previous position of the sprite
@@ -125,7 +141,6 @@ int main(void) {
             
             // Update horizontal position based on horizontal velocity
             villager.col += horizontalVelocity;
-            
             // Draw the sprite in its new position
             drawImageDMA(villager.row, villager.col, villager.width, villager.height, bitty2);
             // state = ?
@@ -139,6 +154,13 @@ int main(void) {
         // state = ?
         break;
     }
+
+     if (state == PLAY) {
+      drawRectDMA(10, 10, 25, 15, WHITE);
+      char timerStr[10];
+      snprintf(timerStr, sizeof(timerStr), "%d", timer);
+      drawString(10, 10, timerStr, BLACK);
+     }
 
     previousButtons = currentButtons; // Store the current state of the buttons
   }
