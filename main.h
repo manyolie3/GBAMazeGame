@@ -4,6 +4,7 @@
 #include "gba.h"
 
 // TODO: Create any necessary structs
+#define TIMER_STRING_MAX_LENGTH 20
 
 /*
 * For example, for a Snake game, one could be:
