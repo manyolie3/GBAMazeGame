@@ -54,14 +54,28 @@ int main(void) {
   villager.height = 15;
 
   //declaring platform variables
-  struct Platform platform;
-  platform.row = 95;
-  platform.col = 70;
-  platform.width = 25;
-  platform.height = 3;
+  struct Platform platform1;
+  platform1.row = 95;
+  platform1.col = 70;
+  platform1.width = 25;
+  platform1.height = 3;
+
+  struct Platform platform2;
+  platform2.row = 45;
+  platform2.col = 30;
+  platform2.width = 30;
+  platform2.height = 3;
+
+  struct Platform platform3;
+  platform3.row = 70;
+  platform3.col = 100;
+  platform3.width = 25;
+  platform3.height = 3;
+
+
 
   //int jumpHeight = 0;
-  int jumpVelocity = -25; // Adjust as needed
+  int jumpVelocity = -15; // Adjust as needed
   int gravity = 1; // Adjust as needed
   int jumping = 0;
   int horizontalVelocity = 0;
@@ -105,10 +119,13 @@ int main(void) {
         break;
       case PLAY:
         // Clear the previous position of the sprite
-        drawImageDMA(platform.row, platform.col, platform.width, platform.height, brickwall);
+        drawImageDMA(platform1.row, platform1.col, platform1.width, platform1.height, brickwall);
+        drawImageDMA(platform2.row, platform2.col, platform2.width, platform2.height, brickwall);
+        drawImageDMA(platform3.row, platform3.col, platform3.width, platform3.height, brickwall);
         undrawImageDMA(villager.row, villager.col, villager.width, villager.height, playscreen2);
             
         horizontalVelocity = 0;
+        //gravity = 1;
 
         // Handle horizontal movement (left/right)
         if (KEY_DOWN(BUTTON_LEFT, currentButtons)) {
@@ -152,21 +169,22 @@ int main(void) {
         // Update horizontal position based on horizontal velocity
         villager.col += horizontalVelocity;
 
-        // Check for collision with platforms
-        for (int i = 0; i < 10; i++) {
-          if (checkCollision(villager, platform)) {
-          // Handle collision with the platform
-          if (jumpVelocity > 0 && villager.row + villager.height <= platform.row) {
-              // Player is jumping and hits the bottom of the platform
-              villager.row = platform.row - villager.height; // Move player above the platform
-              jumping = 0; // Stop jumping
-            } else if (jumpVelocity <= 0 && villager.row < platform.row + platform.height && villager.row + villager.height > platform.row) {
-              // Player is falling and hits the top of the platform
-              villager.row = platform.row - villager.height; // Move player above the platform
-            jumping = 0; // Stop jumping
-          }
+       
+        if (checkCollision(villager, platform1)) {
+          villager.row = platform1.row - villager.height;
+          gravity = 0;
+          //jumping = 1;
+        } else if (checkCollision(villager, platform2)) {
+          villager.row = platform2.row - villager.height;
+          gravity = 0;
+        } else if (checkCollision(villager, platform3)) {
+          villager.row = platform3.row - villager.height;
+          gravity = 0;
+        } else {
+          gravity = 1;
         }
-      }
+
+
         // Draw the sprite in its new position
         drawImageDMA(villager.row, villager.col, villager.width, villager.height, bitty2);
         // state = ?
