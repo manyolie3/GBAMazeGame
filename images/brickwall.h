@@ -1,11 +1,11 @@
 /*
  * Exported with nin10kit v1.8
- * Invocation command was nin10kit --mode=3 --resize=50x8 brickwall brickwall.png 
- * Time-stamp: Friday 03/29/2024, 19:28:40
+ * Invocation command was nin10kit --mode=3 --resize=50x37 brickwall brickwall.png 
+ * Time-stamp: Monday 04/01/2024, 16:26:06
  * 
  * Image Information
  * -----------------
- * brickwall.png 50@8
+ * brickwall.png 50@37
  * 
  * All bug reports / feature requests are to be filed here https://github.com/TricksterGuy/nin10kit/issues
  */
@@ -13,11 +13,11 @@
 #ifndef BRICKWALL_H
 #define BRICKWALL_H
 
-extern const unsigned short brickwall[400];
-#define BRICKWALL_SIZE 800
-#define BRICKWALL_LENGTH 400
+extern const unsigned short brickwall[1850];
+#define BRICKWALL_SIZE 3700
+#define BRICKWALL_LENGTH 1850
 #define BRICKWALL_WIDTH 50
-#define BRICKWALL_HEIGHT 8
+#define BRICKWALL_HEIGHT 37
 
 #endif
 
