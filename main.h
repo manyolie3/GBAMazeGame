@@ -39,4 +39,12 @@ struct Platform {
     int height;
 };
 
+struct Coin {
+    int row;
+    int col;
+    int width;
+    int height;
+    int collected;
+};
+
 #endif

@@ -8,6 +8,7 @@
 #include "images/playscreen2.h"
 #include "images/brickwall.h"
 #include "images/openingscreen.h"
+#include "images/coin.h"
 
 
 int checkCollision(struct Villager player, struct Platform platform) {
@@ -18,6 +19,24 @@ int checkCollision(struct Villager player, struct Platform platform) {
         return 1;
     }
     return 0;
+}
+
+int checkCollisionCoin(struct Villager player, struct Coin coin) {
+    if (player.col < coin.col + coin.width &&
+        player.col + player.width > coin.col &&
+        player.row < coin.row + coin.height &&
+        player.row + player.height > coin.row) {
+        
+        coin.collected = 1;
+        return 1;
+    }
+    return 0;
+}
+
+void isCollected(struct Coin coin, const u16 *image) {
+  if (!coin.collected) {
+    drawImageDMA(coin.row, coin.col, coin.width, coin.height, image);
+  }
 }
 
 
@@ -105,7 +124,12 @@ int main(void) {
   platform8.width = 130;
   platform8.height = 3;
 
-
+  struct Coin coin1;
+  coin1.row = 145;
+  coin1. col = 220;
+  coin1.width = 8;
+  coin1.height = 8;
+  coin1.collected = 0;
 
 
   int verticalVelocity = 0;
@@ -156,6 +180,8 @@ int main(void) {
         break;
 
       case PLAY:
+
+        //draw brick walls
         drawImageDMA(platform0.row, platform0.col, platform0.width, platform0.height, brickwall);
         drawImageDMA(platform02.row, platform02.col, platform02.width, platform02.height, brickwall);
         drawImageDMA(platform1.row, platform1.col, platform1.width, platform1.height, brickwall);
@@ -167,6 +193,8 @@ int main(void) {
         drawImageDMA(platform7.row, platform7.col, platform7.width, platform7.height, brickwall);
         drawImageDMA(platform8.row, platform8.col, platform8.width, platform8.height, brickwall);
 
+        //draw coins
+        isCollected(coin1, coin);
 
         undrawImageDMA(villager.row, villager.col, villager.width, villager.height, playscreen2);
             
@@ -199,25 +227,36 @@ int main(void) {
         villager.row += verticalVelocity;
 
        
-        // if (checkCollision(villager, platform1)) {
-        //   state = LOSE;
-        //   break;
-        // } else if (checkCollision(villager, platform2)) {
-        //   state = LOSE;
-        //   break;
-        // } else if (checkCollision(villager, platform3)) {
-        //   state = LOSE;
-        //   break;
-        // } else if (checkCollision(villager, platform4)) {
-        //   state = LOSE;
-        //   break;
-        // } else if (checkCollision(villager, platform5)) {
-        //   state = LOSE;
-        //   break;
-        // } else if (checkCollision(villager, platform6)) {
-        //   state = LOSE;
-        //   break;
-        // }
+        if (checkCollision(villager, platform1)) {
+          state = LOSE;
+          break;
+        } else if (checkCollision(villager, platform2)) {
+          state = LOSE;
+          break;
+        } else if (checkCollision(villager, platform3)) {
+          state = LOSE;
+          break;
+        } else if (checkCollision(villager, platform4)) {
+          state = LOSE;
+          break;
+        } else if (checkCollision(villager, platform5)) {
+          state = LOSE;
+          break;
+        } else if (checkCollision(villager, platform6)) {
+          state = LOSE;
+          break;
+        } else if (checkCollision(villager, platform0)) {
+          state = LOSE;
+          break;
+        } else if (checkCollision(villager, platform02)) {
+          state = LOSE;
+          break;
+        }
+
+        if (checkCollisionCoin(villager, coin1)) {
+          coin1.collected = 1;
+          undrawImageDMA(coin1.row, coin1.col, coin1.width, coin1.height, playscreen2);
+        }
 
 
         // Draw the sprite in its new position
