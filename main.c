@@ -131,6 +131,23 @@ int main(void) {
   coin1.height = 8;
   coin1.collected = 0;
 
+  struct Coin coin2;
+  coin2.row = 145;
+  coin2.col = 210;
+  coin2.width = 8;
+  coin2.height = 8;
+  coin2.collected = 0;
+
+  struct Coin coin3;
+  coin3.row = 145;
+  coin3.col = 200;
+  coin3.width = 8;
+  coin3.height = 8;
+  coin3.collected = 0;
+
+  
+
+
 
   int verticalVelocity = 0;
   int horizontalVelocity = 0;
@@ -163,6 +180,9 @@ int main(void) {
       drawCenteredString(HEIGHT / 2, WIDTH / 2, 15, 15, "PRESS ENTER TO PLAY!", BLACK); 
       villager.row = 145;
       villager.col = 5;
+      coin1.collected = 0;
+      coin2.collected = 0;
+      coin3.collected = 0;
     }
     
 
@@ -195,6 +215,9 @@ int main(void) {
 
         //draw coins
         isCollected(coin1, coin);
+        isCollected(coin2, coin);
+        isCollected(coin3, coin);
+
 
         undrawImageDMA(villager.row, villager.col, villager.width, villager.height, playscreen2);
             
@@ -253,9 +276,17 @@ int main(void) {
           break;
         }
 
+
+
         if (checkCollisionCoin(villager, coin1)) {
           coin1.collected = 1;
           undrawImageDMA(coin1.row, coin1.col, coin1.width, coin1.height, playscreen2);
+        } else if (checkCollisionCoin(villager, coin2)) {
+          coin2.collected = 1;
+          undrawImageDMA(coin2.row, coin2.col, coin2.width, coin2.height, playscreen2);
+        } else if (checkCollisionCoin(villager, coin3)) {
+          coin3.collected = 1;
+          undrawImageDMA(coin3.row, coin3.col, coin3.width, coin3.height, playscreen2);
         }
 
 
