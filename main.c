@@ -334,7 +334,7 @@ int main(void) {
          
         // vertical movement (up/down)
         if (KEY_DOWN(BUTTON_UP, currentButtons)) {
-          if (villager.row >= 20) {
+          if (villager.row >= 22) {
             verticalVelocity = -1;
           }
         } else if (KEY_DOWN(BUTTON_DOWN, currentButtons)) {
@@ -425,6 +425,11 @@ int main(void) {
           break;
         }
 
+        if (timer == 0) {
+          state = LOSE;
+          break;
+        }
+
         // Draw the sprite in its new position
         drawImageDMA(villager.row, villager.col, villager.width, villager.height, bea);
 
@@ -467,6 +472,5 @@ int main(void) {
   }
 
   UNUSED(previousButtons);
-
   return 0;
 }
