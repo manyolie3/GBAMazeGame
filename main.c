@@ -140,61 +140,69 @@ int main(void) {
   platform8.width = 170;
   platform8.height = 3;
 
-  struct Coin coin1;
-  coin1.row = 145;
-  coin1. col = 160;
-  coin1.width = 8;
-  coin1.height = 8;
-  coin1.collected = 0;
-
-  struct Coin coin02;
-  coin02.row = 145;
-  coin02.col = 200;
-  coin02.width = 8;
-  coin02.height = 8;
-  coin02.collected = 0;
-
+  
   struct Coin coin3;
-  coin3.row = 145;
+  coin3.row = 95;
   coin3.col = 180;
-  coin3.width = 8;
-  coin3.height = 8;
+  coin3.width = 6;
+  coin3.height = 6;
   coin3.collected = 0;
 
   struct Coin coin4;
   coin4.row = 120;
   coin4. col = 20;
-  coin4.width = 8;
-  coin4.height = 8;
+  coin4.width = 6;
+  coin4.height = 6;
   coin4.collected = 0;
 
   struct Coin coin5;
   coin5.row = 120;
   coin5.col = 40;
-  coin5.width = 8;
-  coin5.height = 8;
+  coin5.width = 6;
+  coin5.height = 6;
   coin5.collected = 0;
 
   struct Coin coin6;
   coin6.row = 120;
   coin6.col = 60;
-  coin6.width = 8;
-  coin6.height = 8;
+  coin6.width = 6;
+  coin6.height = 6;
   coin6.collected = 0;
 
   struct Coin coin7;
   coin7.row = 95;
   coin7.col = 200;
-  coin7.width = 8;
-  coin7.height = 8;
+  coin7.width = 6;
+  coin7.height = 6;
   coin7.collected = 0;
 
   struct Coin coin8;
   coin8.row = 95;
   coin8.col = 220;
-  coin8.width = 8;
-  coin8.height = 8;
+  coin8.width = 6;
+  coin8.height = 6;
   coin8.collected = 0;
+
+  struct Coin coin11;
+  coin11.row = 45;
+  coin11.col = 20;
+  coin11.width = 6;
+  coin11.height = 6;
+  coin11.collected = 0;
+
+  struct Coin coin12;
+  coin12.row = 45;
+  coin12.col = 40;
+  coin12.width = 6;
+  coin12.height = 6;
+  coin12.collected = 0;
+
+  struct Coin coin13;
+  coin13.row = 45;
+  coin13.col = 60;
+  coin13.width = 6;
+  coin13.height = 6;
+  coin13.collected = 0;
 
   struct House house1;
   house1.row = 20;
@@ -242,17 +250,21 @@ int main(void) {
       drawCenteredString(10, WIDTH / 2, 0, 190, "PRESS ENTER TO PLAY!", WHITE);
       villager.row = 145;
       villager.col = 5;
-      coin1.collected = 0;
-      coin02.collected = 0;
+      
+
       coin3.collected = 0;
       coin4.collected = 0;
       coin5.collected = 0;
       coin6.collected = 0;
       coin7.collected = 0;
       coin8.collected = 0;
+      coin11.collected = 0;
+      coin12.collected = 0;
+      coin13.collected = 0;
       coinsCollected = 0;
       house1.collided = 0;
       endScreen = 0;
+
     }
     
 
@@ -290,14 +302,15 @@ int main(void) {
         endScreen = 0;
 
         //draw coins
-        isCollected(coin1, coin2);
-        isCollected(coin02, coin2);
         isCollected(coin3, coin2);
         isCollected(coin4, coin2);
         isCollected(coin5, coin2);
         isCollected(coin6, coin2);
         isCollected(coin7, coin2);
         isCollected(coin8, coin2);
+        isCollected(coin11, coin2);
+        isCollected(coin12, coin2);
+        isCollected(coin13, coin2);
 
         drawString(5, 75, "coins: ", BLACK);
 
@@ -321,7 +334,7 @@ int main(void) {
          
         // vertical movement (up/down)
         if (KEY_DOWN(BUTTON_UP, currentButtons)) {
-          if (villager.row >= 15) {
+          if (villager.row >= 20) {
             verticalVelocity = -1;
           }
         } else if (KEY_DOWN(BUTTON_DOWN, currentButtons)) {
@@ -366,15 +379,8 @@ int main(void) {
           break;
         }
 
-        if (checkCollisionCoin(villager, coin1) && !coin1.collected) {
-          coin1.collected = 1;
-          coinsCollected++;
-          undrawImageDMA(coin1.row, coin1.col, coin1.width, coin1.height, playscreen2);
-        } else if (checkCollisionCoin(villager, coin02) && !coin02.collected) {
-          coin02.collected = 1;
-          coinsCollected++;
-          undrawImageDMA(coin02.row, coin02.col, coin02.width, coin02.height, playscreen2);
-        } else if (checkCollisionCoin(villager, coin3) && !coin3.collected) {
+       
+        if (checkCollisionCoin(villager, coin3) && !coin3.collected) {
           coin3.collected = 1;
           coinsCollected++;
           undrawImageDMA(coin3.row, coin3.col, coin3.width, coin3.height, playscreen2);
@@ -398,6 +404,18 @@ int main(void) {
           coin8.collected = 1;
           coinsCollected++;
           undrawImageDMA(coin8.row, coin8.col, coin8.width, coin8.height, playscreen2);
+        } else if (checkCollisionCoin(villager, coin11) && !coin11.collected) {
+          coin11.collected = 1;
+          coinsCollected++;
+          undrawImageDMA(coin11.row, coin11.col, coin11.width, coin11.height, playscreen2);
+        } else if (checkCollisionCoin(villager, coin12) && !coin12.collected) {
+          coin12.collected = 1;
+          coinsCollected++;
+          undrawImageDMA(coin12.row, coin12.col, coin12.width, coin12.height, playscreen2);
+        } else if (checkCollisionCoin(villager, coin13) && !coin13.collected) {
+          coin13.collected = 1;
+          coinsCollected++;
+          undrawImageDMA(coin13.row, coin13.col, coin13.width, coin13.height, playscreen2);
         }
 
 
