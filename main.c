@@ -126,34 +126,54 @@ int main(void) {
 
   struct Coin coin1;
   coin1.row = 145;
-  coin1. col = 220;
+  coin1. col = 160;
   coin1.width = 8;
   coin1.height = 8;
   coin1.collected = 0;
 
   struct Coin coin2;
   coin2.row = 145;
-  coin2.col = 210;
+  coin2.col = 200;
   coin2.width = 8;
   coin2.height = 8;
   coin2.collected = 0;
 
   struct Coin coin3;
   coin3.row = 145;
-  coin3.col = 200;
+  coin3.col = 180;
   coin3.width = 8;
   coin3.height = 8;
   coin3.collected = 0;
 
-  
+  struct Coin coin4;
+  coin4.row = 120;
+  coin4. col = 20;
+  coin4.width = 8;
+  coin4.height = 8;
+  coin4.collected = 0;
 
+  struct Coin coin5;
+  coin5.row = 120;
+  coin5.col = 40;
+  coin5.width = 8;
+  coin5.height = 8;
+  coin5.collected = 0;
+
+  struct Coin coin6;
+  coin6.row = 120;
+  coin6.col = 60;
+  coin6.width = 8;
+  coin6.height = 8;
+  coin6.collected = 0;
 
 
   int verticalVelocity = 0;
   int horizontalVelocity = 0;
   
-  unsigned int timer = 60;
+
+  unsigned int timer = 45;
   int gameStart = 0;
+  int coinsCollected = 0;
 
   // Load initial application state
   enum gba_state state = START;
@@ -194,7 +214,7 @@ int main(void) {
           drawFullScreenImageDMA(playscreen2);
         }
 
-        timer = 60;
+        timer = 45;
         gameStart = 1;
 
         break;
@@ -217,6 +237,11 @@ int main(void) {
         isCollected(coin1, coin);
         isCollected(coin2, coin);
         isCollected(coin3, coin);
+        isCollected(coin4, coin);
+        isCollected(coin5, coin);
+        isCollected(coin6, coin);
+
+        drawString(5, 75, "coins: ", BLACK);
 
 
         undrawImageDMA(villager.row, villager.col, villager.width, villager.height, playscreen2);
@@ -276,17 +301,30 @@ int main(void) {
           break;
         }
 
-
-
-        if (checkCollisionCoin(villager, coin1)) {
+        if (checkCollisionCoin(villager, coin1) && !coin1.collected) {
           coin1.collected = 1;
+          coinsCollected++;
           undrawImageDMA(coin1.row, coin1.col, coin1.width, coin1.height, playscreen2);
-        } else if (checkCollisionCoin(villager, coin2)) {
+        } else if (checkCollisionCoin(villager, coin2) && !coin2.collected) {
           coin2.collected = 1;
+          coinsCollected++;
           undrawImageDMA(coin2.row, coin2.col, coin2.width, coin2.height, playscreen2);
-        } else if (checkCollisionCoin(villager, coin3)) {
+        } else if (checkCollisionCoin(villager, coin3) && !coin3.collected) {
           coin3.collected = 1;
+          coinsCollected++;
           undrawImageDMA(coin3.row, coin3.col, coin3.width, coin3.height, playscreen2);
+        } else if (checkCollisionCoin(villager, coin4) && !coin4.collected) {
+          coin4.collected = 1;
+          coinsCollected++;
+          undrawImageDMA(coin4.row, coin4.col, coin4.width, coin4.height, playscreen2);
+        } else if (checkCollisionCoin(villager, coin5) && !coin5.collected) {
+          coin5.collected = 1;
+          coinsCollected++;
+          undrawImageDMA(coin5.row, coin5.col, coin5.width, coin5.height, playscreen2);
+        } else if (checkCollisionCoin(villager, coin6) && !coin6.collected) {
+          coin6.collected = 1;
+          coinsCollected++;
+          undrawImageDMA(coin6.row, coin6.col, coin6.width, coin6.height, playscreen2);
         }
 
 
@@ -304,14 +342,20 @@ int main(void) {
         break;
     }
 
-     if (state == PLAY) {
-      drawImageDMA(5, 5, 60, 7, playscreen2);
+    if (state == PLAY) {
+      drawImageDMA(4, 8, 65, 8, playscreen2);
       char timerStr[10];
       snprintf(timerStr, sizeof(timerStr), "T: %d", timer);
       drawString(5, 5 , timerStr, BLACK);
-     }
 
+      drawImageDMA(5, 115, 65, 7, playscreen2);
+      char coinsStr[20];
+      snprintf(coinsStr, sizeof(coinsStr), "%d", coinsCollected);
+      drawString(5, 115, coinsStr, BLACK);
+    }
+  
     previousButtons = currentButtons;
+  
   }
 
   UNUSED(previousButtons);
