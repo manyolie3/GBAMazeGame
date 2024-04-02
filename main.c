@@ -67,37 +67,37 @@ int main(void) {
   struct Platform platform0;
   platform0.row = 135;
   platform0.col = 0;
-  platform0.width = 75;
+  platform0.width = 105;
   platform0.height = 3;
 
   struct Platform platform02;
   platform02.row = 135;
-  platform02.col = 95;
-  platform02.width = 145;
+  platform02.col = 125;
+  platform02.width = 115;
   platform02.height = 3;
 
   struct Platform platform1;
   platform1.row = 110;
   platform1.col = 0;
-  platform1.width = 75;
+  platform1.width = 20;
   platform1.height = 3;
 
   struct Platform platform2;
   platform2.row = 110;
-  platform2.col = 95;
-  platform2.width = 145;
+  platform2.col = 40;
+  platform2.width = 200;
   platform2.height = 3;
 
   struct Platform platform3;
   platform3.row = 85;
   platform3.col = 0;
-  platform3.width = 100;
+  platform3.width = 150;
   platform3.height = 3;
 
   struct Platform platform4;
   platform4.row = 85;
-  platform4.col = 120;
-  platform4.width = 120;
+  platform4.col = 170;
+  platform4.width = 70;
   platform4.height = 3;
 
   struct Platform platform5;
@@ -115,13 +115,13 @@ int main(void) {
   struct Platform platform7;
   platform7.row = 35;
   platform7.col = 0;
-  platform7.width = 90;
+  platform7.width = 50;
   platform7.height = 3;
 
   struct Platform platform8;
   platform8.row = 35;
-  platform8.col = 110;
-  platform8.width = 130;
+  platform8.col = 70;
+  platform8.width = 170;
   platform8.height = 3;
 
   struct Coin coin1;
@@ -203,6 +203,10 @@ int main(void) {
       coin1.collected = 0;
       coin2.collected = 0;
       coin3.collected = 0;
+      coin4.collected = 0;
+      coin5.collected = 0;
+      coin6.collected = 0;
+      coinsCollected = 0;
     }
     
 
@@ -297,6 +301,12 @@ int main(void) {
           state = LOSE;
           break;
         } else if (checkCollision(villager, platform02)) {
+          state = LOSE;
+          break;
+        } else if (checkCollision(villager, platform7)) {
+          state = LOSE;
+          break;
+        } else if (checkCollision(villager, platform8)) {
           state = LOSE;
           break;
         }
