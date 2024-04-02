@@ -47,4 +47,12 @@ struct Coin {
     int collected;
 };
 
+struct House {
+    int row;
+    int col;
+    int width;
+    int height;
+    int collided;
+};
+
 #endif

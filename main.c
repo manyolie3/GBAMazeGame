@@ -3,12 +3,15 @@
 #include <stdlib.h>
 
 #include "gba.h"
-#include "images/openingscreen3.h"
-#include "images/bitty2.h"
 #include "images/playscreen2.h"
-#include "images/brickwall.h"
-#include "images/openingscreen.h"
-#include "images/coin.h"
+#include "images/house.h"
+#include "images/bushes.h"
+#include "images/bea.h"
+#include "images/coin2.h"
+#include "images/animalcrossingbeach.h"
+#include "images/instructions.h"
+#include "images/youlose.h"
+#include "images/youwin.h"
 
 
 int checkCollision(struct Villager player, struct Platform platform) {
@@ -28,6 +31,17 @@ int checkCollisionCoin(struct Villager player, struct Coin coin) {
         player.row + player.height > coin.row) {
         
         coin.collected = 1;
+        return 1;
+    }
+    return 0;
+}
+
+int checkCollisionHouse(struct Villager player, struct House house) {
+    if (player.col < house.col + house.width &&
+        player.col + player.width > house.col &&
+        player.row < house.row + house.height &&
+        player.row + player.height > house.row) {
+        house.collided = 1;
         return 1;
     }
     return 0;
@@ -131,12 +145,12 @@ int main(void) {
   coin1.height = 8;
   coin1.collected = 0;
 
-  struct Coin coin2;
-  coin2.row = 145;
-  coin2.col = 200;
-  coin2.width = 8;
-  coin2.height = 8;
-  coin2.collected = 0;
+  struct Coin coin02;
+  coin02.row = 145;
+  coin02.col = 200;
+  coin02.width = 8;
+  coin02.height = 8;
+  coin02.collected = 0;
 
   struct Coin coin3;
   coin3.row = 145;
@@ -166,6 +180,13 @@ int main(void) {
   coin6.height = 8;
   coin6.collected = 0;
 
+  struct House house1;
+  house1.row = 20;
+  house1.col = 220;
+  house1.width = 15;
+  house1.height = 15;
+  house1.collided = 0;
+
 
   int verticalVelocity = 0;
   int horizontalVelocity = 0;
@@ -174,13 +195,16 @@ int main(void) {
   unsigned int timer = 45;
   int gameStart = 0;
   int coinsCollected = 0;
+  static int endScreen = 0;
 
   // Load initial application state
   enum gba_state state = START;
-  drawFullScreenImageDMA(openingscreen3);
-  drawCenteredString(HEIGHT / 2, WIDTH / 2, 0, 0, "HELP BITTY COLLECT LEAVES AND GET HOME!", BLACK);
-  drawCenteredString(HEIGHT / 2, WIDTH / 2, 15, 15, "PRESS ENTER TO PLAY!", BLACK);
-
+  drawFullScreenImageDMA(animalcrossingbeach);
+  drawCenteredString(10, WIDTH / 2, 0, 60, "Help Alice return home!", BLACK);
+  drawCenteredString(10, WIDTH / 2, 0, 90, "Avoid the poisonous flower bushes", BLACK);
+  drawCenteredString(10, WIDTH / 2, 0, 120, "and help her collect coins!", BLACK);
+  drawCenteredString(10, WIDTH / 2, 0, 150, "PRESS ENTER TO PLAY!", BLACK);
+  
 
   while (1) {
     currentButtons = BUTTONS; // Load the current state of the buttons
@@ -195,18 +219,22 @@ int main(void) {
 
     if (KEY_JUST_PRESSED(BUTTON_SELECT, currentButtons, previousButtons)) {
       state = START;
-      drawFullScreenImageDMA(openingscreen3);
-      drawCenteredString(HEIGHT / 2, WIDTH / 2, 0, 0, "HELP BITTY COLLECT LEAVES AND GET HOME!", BLACK);
-      drawCenteredString(HEIGHT / 2, WIDTH / 2, 15, 15, "PRESS ENTER TO PLAY!", BLACK); 
+      drawFullScreenImageDMA(animalcrossingbeach);
+      drawCenteredString(10, WIDTH / 2, 0, 60, "Help Alice return home!", BLACK);
+      drawCenteredString(10, WIDTH / 2, 0, 90, "Avoid the poisonous flower bushes", BLACK);
+      drawCenteredString(10, WIDTH / 2, 0, 120, "and help her collect coins!", BLACK);
+      drawCenteredString(10, WIDTH / 2, 0, 150, "PRESS ENTER TO PLAY!", BLACK);
       villager.row = 145;
       villager.col = 5;
       coin1.collected = 0;
-      coin2.collected = 0;
+      coin02.collected = 0;
       coin3.collected = 0;
       coin4.collected = 0;
       coin5.collected = 0;
       coin6.collected = 0;
       coinsCollected = 0;
+      house1.collided = 0;
+      endScreen = 0;
     }
     
 
@@ -226,24 +254,30 @@ int main(void) {
       case PLAY:
 
         //draw brick walls
-        drawImageDMA(platform0.row, platform0.col, platform0.width, platform0.height, brickwall);
-        drawImageDMA(platform02.row, platform02.col, platform02.width, platform02.height, brickwall);
-        drawImageDMA(platform1.row, platform1.col, platform1.width, platform1.height, brickwall);
-        drawImageDMA(platform2.row, platform2.col, platform2.width, platform2.height, brickwall);
-        drawImageDMA(platform3.row, platform3.col, platform3.width, platform3.height, brickwall);
-        drawImageDMA(platform4.row, platform4.col, platform4.width, platform4.height, brickwall);
-        drawImageDMA(platform5.row, platform5.col, platform5.width, platform5.height, brickwall);
-        drawImageDMA(platform6.row, platform6.col, platform6.width, platform6.height, brickwall);
-        drawImageDMA(platform7.row, platform7.col, platform7.width, platform7.height, brickwall);
-        drawImageDMA(platform8.row, platform8.col, platform8.width, platform8.height, brickwall);
+        drawImageDMA(platform0.row, platform0.col, platform0.width, platform0.height, bushes);
+        drawImageDMA(platform02.row, platform02.col, platform02.width, platform02.height, bushes);
+        drawImageDMA(platform1.row, platform1.col, platform1.width, platform1.height, bushes);
+        drawImageDMA(platform2.row, platform2.col, platform2.width, platform2.height, bushes);
+        drawImageDMA(platform3.row, platform3.col, platform3.width, platform3.height, bushes);
+        drawImageDMA(platform4.row, platform4.col, platform4.width, platform4.height, bushes);
+        drawImageDMA(platform5.row, platform5.col, platform5.width, platform5.height, bushes);
+        drawImageDMA(platform6.row, platform6.col, platform6.width, platform6.height, bushes);
+        drawImageDMA(platform7.row, platform7.col, platform7.width, platform7.height, bushes);
+        drawImageDMA(platform8.row, platform8.col, platform8.width, platform8.height, bushes);
+
+        //draw house
+        drawImageDMA(house1.row, house1.col, house1.width, house1.height, house);
+        house1.collided = 0;
+
+        endScreen = 0;
 
         //draw coins
-        isCollected(coin1, coin);
-        isCollected(coin2, coin);
-        isCollected(coin3, coin);
-        isCollected(coin4, coin);
-        isCollected(coin5, coin);
-        isCollected(coin6, coin);
+        isCollected(coin1, coin2);
+        isCollected(coin02, coin2);
+        isCollected(coin3, coin2);
+        isCollected(coin4, coin2);
+        isCollected(coin5, coin2);
+        isCollected(coin6, coin2);
 
         drawString(5, 75, "coins: ", BLACK);
 
@@ -252,6 +286,7 @@ int main(void) {
             
         horizontalVelocity = 0;
         verticalVelocity = 0;
+        
 
         // horizontal movement (left/right)
         if (KEY_DOWN(BUTTON_LEFT, currentButtons)) {
@@ -315,10 +350,10 @@ int main(void) {
           coin1.collected = 1;
           coinsCollected++;
           undrawImageDMA(coin1.row, coin1.col, coin1.width, coin1.height, playscreen2);
-        } else if (checkCollisionCoin(villager, coin2) && !coin2.collected) {
-          coin2.collected = 1;
+        } else if (checkCollisionCoin(villager, coin02) && !coin02.collected) {
+          coin02.collected = 1;
           coinsCollected++;
-          undrawImageDMA(coin2.row, coin2.col, coin2.width, coin2.height, playscreen2);
+          undrawImageDMA(coin02.row, coin02.col, coin02.width, coin02.height, playscreen2);
         } else if (checkCollisionCoin(villager, coin3) && !coin3.collected) {
           coin3.collected = 1;
           coinsCollected++;
@@ -337,20 +372,37 @@ int main(void) {
           undrawImageDMA(coin6.row, coin6.col, coin6.width, coin6.height, playscreen2);
         }
 
+        if (checkCollisionHouse(villager, house1)) {
+          state = WIN;
+          house1.collided = 0;
+          break;
+        }
 
         // Draw the sprite in its new position
-        drawImageDMA(villager.row, villager.col, villager.width, villager.height, bitty2);
-
+        drawImageDMA(villager.row, villager.col, villager.width, villager.height, bea);
 
         break;
       case WIN:
-
-        // state = ?
+        //state = WIN;
+        if (state == WIN && !endScreen) {
+          drawFullScreenImageDMA(youwin);
+          char coinsStr[20];
+          snprintf(coinsStr, sizeof(coinsStr), " you collected %d coins", coinsCollected);
+          drawString(20, 40, "you win!", WHITE);
+          drawString(35, 40, coinsStr, WHITE);
+          endScreen = 1;
+        }
         break;
       case LOSE:
-        drawFullScreenImageDMA(openingscreen);
+        //state = LOSE;
+        if (state == LOSE && !endScreen) {
+          drawFullScreenImageDMA(youlose);
+          drawString(HEIGHT / 2 - 30, 80, "you lose :(", WHITE);
+          drawString(HEIGHT / 2, 30, "press backspace to try again", WHITE);
+          endScreen = 1;
+        }
         break;
-    }
+      }
 
     if (state == PLAY) {
       drawImageDMA(4, 8, 65, 8, playscreen2);
