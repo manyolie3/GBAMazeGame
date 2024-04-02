@@ -1,7 +1,7 @@
 /*
  * Exported with nin10kit v1.8
  * Invocation command was nin10kit --mode=3 --resize=240x160 playscreen2 playscreen2.png 
- * Time-stamp: Friday 03/29/2024, 15:49:05
+ * Time-stamp: Tuesday 04/02/2024, 16:37:40
  * 
  * Image Information
  * -----------------

@@ -1,7 +1,7 @@
 /*
  * Exported with nin10kit v1.8
  * Invocation command was nin10kit --mode=3 --resize=8x8 coin2 coin2.png 
- * Time-stamp: Tuesday 04/02/2024, 13:34:26
+ * Time-stamp: Tuesday 04/02/2024, 16:37:52
  * 
  * Image Information
  * -----------------

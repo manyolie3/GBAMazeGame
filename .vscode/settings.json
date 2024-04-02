@@ -1,5 +1,6 @@
 {
     "files.associations": {
-        "platform1.h": "c"
+        "platform1.h": "c",
+        "customopenscreen.h": "c"
     }
 }
